@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Demo</string>
+
+    <string-array name="fields">
+        <item>Id</item>
+        <item>Name</item>
+        <item>Price</item>
+    </string-array>
+</resources>

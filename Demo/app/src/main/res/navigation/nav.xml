@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav"
+    app:startDestination="@id/homeFragment">
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.example.demo.ui.HomeFragment"
+        android:label="Home"
+        tools:layout="@layout/fragment_home" />
+    <fragment
+        android:id="@+id/programListFragment"
+        android:name="com.example.demo.ui.ProgramListFragment"
+        android:label="Program List"
+        tools:layout="@layout/fragment_program_list" />
+    <fragment
+        android:id="@+id/studentListFragment"
+        android:name="com.example.demo.ui.StudentListFragment"
+        android:label="Student List"
+        tools:layout="@layout/fragment_student_list" />
+    <fragment
+        android:id="@+id/studentInsertFragment"
+        android:name="com.example.demo.ui.StudentInsertFragment"
+        android:label="Student Insert"
+        tools:layout="@layout/fragment_student_insert" />
+    <fragment
+        android:id="@+id/studentUpdateFragment"
+        android:name="com.example.demo.ui.StudentUpdateFragment"
+        android:label="Student Update"
+        tools:layout="@layout/fragment_student_update" />
+</navigation>
