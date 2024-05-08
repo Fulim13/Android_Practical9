@@ -8,17 +8,17 @@ import kotlinx.coroutines.launch
 
 class StudentVM (val app: Application) : AndroidViewModel(app) {
     // TODO(8): Access to database
-    private val db = 0
+    private val db = DB.get(app)
 
-    fun getLiveData() = MutableLiveData<List<Student>>()
+    fun getLiveData() = db.studentDao.getLiveData()
 
-    suspend fun getAll() = 0
-    suspend fun get(id: Int) = 0
+    suspend fun getAll() = db.studentDao.getLiveData()
+    suspend fun get(id: Int) = db.studentDao.get(id)
 
-    fun insert(s: Student) = 0
-    fun update(s: Student) = 0
-    fun delete(s: Student) = 0
-    fun deleteAll()        = 0
+    fun insert(s: Student) = viewModelScope.launch { db.studentDao.insert(s) }
+    fun update(s: Student) = viewModelScope.launch { db.studentDao.update(s) }
+    fun delete(s: Student) = viewModelScope.launch { db.studentDao.delete(s) }
+    fun deleteAll()        = viewModelScope.launch { db.studentDao.deleteAll() }
 
     // ---------------------------------------------------------------------------------------------
 

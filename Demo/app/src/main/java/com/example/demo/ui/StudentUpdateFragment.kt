@@ -15,6 +15,7 @@ import com.example.demo.data.Student
 import com.example.demo.data.StudentVM
 import com.example.demo.databinding.FragmentStudentUpdateBinding
 import com.example.demo.util.errorDialog
+import com.example.demo.util.getArrayAdapter
 import com.example.demo.util.setSelection
 import kotlinx.coroutines.launch
 
@@ -39,14 +40,14 @@ class StudentUpdateFragment : Fragment() {
         // -----------------------------------------------------------------------------------------
 
         // TODO(13): Convert to extension function
-        val adapter = ArrayAdapter<Program>(context!!, android.R.layout.simple_spinner_item)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        val adapter = getArrayAdapter<Program>()
         binding.spnProgram.adapter = adapter
 
         // TODO(14): Read all programs --> add to spinner
-
-
-        reset()
+        lifecycleScope.launch{
+            adapter.addAll(programVM.getAll())
+            reset()
+        }
 
         // -----------------------------------------------------------------------------------------
 
@@ -55,25 +56,42 @@ class StudentUpdateFragment : Fragment() {
 
     private fun setGender(gender: String) {
         // TODO(16): Load gender radio buttons
-
+        when (gender){
+            "F" -> binding.radFemale.isChecked = true
+            "M" -> binding.radMale.isChecked = true
+        }
     }
 
     private fun setProgram(programId: String) {
         // TODO(17): Load program spinner
+        for (i in 0..< binding.spnProgram.count) {
+            val item = binding.spnProgram.getItemAtPosition(i) as Program
+            if (item.id == programId){
+                binding.spnProgram.setSelection(i)
+                break
+            }
+        }
 
     }
 
     private fun reset() {
         // TODO(15): Read 1 student --> load data
+        lifecycleScope.launch {
+            val s = vm.get(studentId)
+            if (s==null){
+                nav.navigateUp()
+                return@launch
+            }
+
+            binding.txtId.text = s.id.toString()
+            binding.edtName.setText(s.name)
+            setGender(s.gender)
+//            setProgram(s.programId)
+            binding.spnProgram.setSelection<Program> { it.id == s.programId }
+            binding.edtName.requestFocus()
+        }
 
 
-        val s = Student()
-
-        binding.txtId.text = s.id.toString()
-        binding.edtName.setText(s.name)
-        setGender(s.gender)
-        setProgram(s.programId)
-        binding.edtName.requestFocus()
     }
 
     private fun submit() {

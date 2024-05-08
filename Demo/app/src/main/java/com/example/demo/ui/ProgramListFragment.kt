@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.example.demo.data.Program
@@ -13,6 +14,7 @@ import com.example.demo.data.ProgramVM
 import com.example.demo.databinding.FragmentProgramListBinding
 import com.example.demo.util.ProgramAdapter
 import com.example.demo.util.infoDialog
+import kotlinx.coroutines.launch
 
 class ProgramListFragment : Fragment() {
 
@@ -51,21 +53,22 @@ class ProgramListFragment : Fragment() {
 
     private fun demo1() {
         // TODO(9): Read 1 program (RIS)
-
-        val p = Program("TODO", "TODO")
-        val s = "${p.id} - ${p.name}"
-        infoDialog(s)
+        lifecycleScope.launch{
+            val p = vm.get("RIS")
+            if (p == null) return@launch
+            val s = "${p.id} - ${p.name}"
+            infoDialog(s)
+        }
     }
 
     private fun demo2() {
         // TODO(10): Read all programs
+        lifecycleScope.launch{
+            val programs = vm.getAll()
+            val s = programs.joinToString("\n") { "${it.id} - ${it.name}" }
+            infoDialog(s)
+        }
 
-        val programs = listOf(
-            Program("TODO", "TODO"),
-            Program("TODO", "TODO"),
-        )
-        val s = programs.joinToString("\n") { "${it.id} - ${it.name}" }
-        infoDialog(s)
     }
 
 }

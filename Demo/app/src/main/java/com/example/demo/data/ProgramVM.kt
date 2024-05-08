@@ -8,17 +8,19 @@ import kotlinx.coroutines.launch
 
 class ProgramVM (val app: Application) : AndroidViewModel(app) {
     // TODO(7): Access to database
-    private val db = 0
+    private val db = DB.get(app)
 
-    fun getLiveData() = MutableLiveData<List<Program>>()
+    // 1 to 1 mapping to DAO
+    fun getLiveData() = db.programDao.getLiveData()
 
-    suspend fun getAll() = 0
-    suspend fun get(id: String) = 0
+    suspend fun getAll() = db.programDao.getAll()
+    suspend fun get(id: String) = db.programDao.get(id)
 
-    fun insert(p: Program) = 0
-    fun update(p: Program) = 0
-    fun delete(p: Program) = 0
-    fun deleteAll()        = 0
+    //Why this do not have suspend, because the insert,update , delete and deleteAll, not need return the value, so it can directly run on separate thread
+    fun insert(p: Program) = viewModelScope.launch { db.programDao.insert(p) }
+    fun update(p: Program) =  viewModelScope.launch { db.programDao.update(p) }
+    fun delete(p: Program) = viewModelScope.launch { db.programDao.delete(p) }
+    fun deleteAll()        = viewModelScope.launch { db.programDao.deleteAll() }
 
     // ---------------------------------------------------------------------------------------------
 

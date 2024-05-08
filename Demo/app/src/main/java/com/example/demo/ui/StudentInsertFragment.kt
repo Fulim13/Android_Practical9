@@ -15,6 +15,7 @@ import com.example.demo.data.Student
 import com.example.demo.data.StudentVM
 import com.example.demo.databinding.FragmentStudentInsertBinding
 import com.example.demo.util.errorDialog
+import com.example.demo.util.getArrayAdapter
 import kotlinx.coroutines.launch
 
 class StudentInsertFragment : Fragment() {
@@ -36,14 +37,16 @@ class StudentInsertFragment : Fragment() {
         // -----------------------------------------------------------------------------------------
 
         // TODO(11A): Convert to extension function
-        val adapter = ArrayAdapter<Program>(context!!, android.R.layout.simple_spinner_item)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        val adapter = getArrayAdapter<Program>()
         binding.spnProgram.adapter = adapter
 
         // TODO(12): Read all programs --> add to spinner
+        lifecycleScope.launch{
+            adapter.addAll(programVM.getAll())
+            reset()
+        }
 
 
-        reset()
 
         // -----------------------------------------------------------------------------------------
 
@@ -60,7 +63,7 @@ class StudentInsertFragment : Fragment() {
 
     private fun submit() {
         val s = Student(
-            id        = 0,
+            id        = 0, //when id is 0, it will auto increment
             name      = binding.edtName.text.toString().trim(),
             gender    = if (binding.radFemale.isChecked) "F" else "M",
             programId = (binding.spnProgram.selectedItem as Program).id

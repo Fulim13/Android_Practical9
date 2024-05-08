@@ -3,6 +3,7 @@ package com.example.demo.util
 import android.app.AlertDialog
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.Toast
@@ -10,6 +11,7 @@ import androidx.core.graphics.drawable.toBitmapOrNull
 import androidx.core.graphics.scale
 import androidx.fragment.app.Fragment
 import com.example.demo.R
+import com.example.demo.data.Program
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.Blob
 import java.io.ByteArrayOutputStream
@@ -21,6 +23,13 @@ import java.io.ByteArrayOutputStream
 // Usage: Select spinner item based on condition
 fun <T> Spinner.setSelection(fn: (T) -> Boolean) {
     // TODO(18): Select spinner item based on condition
+    for (i in 0..< count) {
+        val item = getItemAtPosition(i) as T
+        if (fn(item)){
+            setSelection(i)
+            break
+        }
+    }
 
 }
 
@@ -29,8 +38,11 @@ fun <T> Spinner.setSelection(fn: (T) -> Boolean) {
 // ----------------------------------------------------------------------------
 
 // Usage: Create an array adapter for spinner
-fun <T> Fragment.getArrayAdapter() {
+fun <T> Fragment.getArrayAdapter(): ArrayAdapter<T> {
     // TODO(11B): Create an array adapter for spinner
+    val adapter = ArrayAdapter<T>(context!!, android.R.layout.simple_spinner_item)
+    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+    return adapter
 
 }
 
