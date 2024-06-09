@@ -98,7 +98,7 @@ interface StudentDao {
 // solution: delete whole app with the db, then no problem
 @Database(
     entities = [Program::class , Student::class],
-    version = 1,
+    version = 2,
     exportSchema = true
 )
 abstract class DB : RoomDatabase() {
@@ -116,6 +116,7 @@ abstract class DB : RoomDatabase() {
         fun get(context: Context): DB {
             db = db ?: Room
                 .databaseBuilder(context, DB::class.java, "database.db")
+                .fallbackToDestructiveMigration() // add this line
                 .build()
             return db!!
         }
